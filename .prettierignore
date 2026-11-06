@@ -1,0 +1,2 @@
+# shadcn components stay identical to upstream so they can be updated cleanly
+src/components/ui/
