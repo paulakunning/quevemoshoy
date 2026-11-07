@@ -6,5 +6,11 @@
   "Home": {
     "title": "¿Qué vemos hoy?",
     "tagline": "Series para esta noche, pedidas en lenguaje natural."
+  },
+  "LocaleSwitcher": {
+    "label": "Idioma"
+  },
+  "Footer": {
+    "attribution": "Este producto usa la API de TMDB, pero TMDB no lo avala ni lo certifica."
   }
 }
