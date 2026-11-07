@@ -6,5 +6,11 @@
   "Home": {
     "title": "What do we watch today?",
     "tagline": "TV shows for tonight, asked for in plain language."
+  },
+  "LocaleSwitcher": {
+    "label": "Language"
+  },
+  "Footer": {
+    "attribution": "This product uses the TMDB API but is not endorsed or certified by TMDB."
   }
 }
