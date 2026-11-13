@@ -12,5 +12,13 @@
   },
   "Footer": {
     "attribution": "Este producto usa la API de TMDB, pero TMDB no lo avala ni lo certifica."
+  },
+  "Genres": {
+    "mystery": "Misterio",
+    "comedy": "Comedia",
+    "drama": "Drama",
+    "sci-fi": "Ciencia ficción y fantasía",
+    "crime": "Crimen",
+    "animation": "Animación"
   }
 }
