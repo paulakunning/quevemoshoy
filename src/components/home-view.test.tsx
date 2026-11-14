@@ -61,11 +61,8 @@ const shows: ShowSummary[] = [
 describe("HomeView", () => {
   describe("idle", () => {
     it("shows the title", () => {
-      // 1. Armar: dibujo la pantalla en un estado
       renderView({ kind: "idle" });
-      // 2. Buscar: busco algo como lo buscaría una persona
       const title = screen.getByRole("heading", { level: 1 });
-      // 3. Comprobar: digo qué espero de eso
       expect(title).toHaveTextContent("¿Qué vemos hoy?");
     });
 
