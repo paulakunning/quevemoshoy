@@ -27,6 +27,10 @@
       "text": "We couldn't load the shows. Pick a genre again in a while."
     }
   },
+  "Error": {
+    "title": "Something went wrong",
+    "retry": "Try again"
+  },
   "LocaleSwitcher": {
     "label": "Language"
   },

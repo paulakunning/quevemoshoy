@@ -27,6 +27,10 @@
       "text": "No pudimos traer las series. Elegí un género de nuevo en un rato."
     }
   },
+  "Error": {
+    "title": "Algo salió mal",
+    "retry": "Probar de nuevo"
+  },
   "LocaleSwitcher": {
     "label": "Idioma"
   },
