@@ -1,3 +1,4 @@
+import type { DiscoverResult } from "@/lib/tmdb/client";
 import type { GenreSlug } from "@/lib/tmdb/genres";
 import type { ShowSummary } from "@/lib/tmdb/shows";
 
@@ -9,3 +10,18 @@ export type HomeState =
   | { kind: "results"; genre: GenreSlug; shows: ShowSummary[] }
   | { kind: "empty"; genre: GenreSlug }
   | { kind: "error"; genre: GenreSlug };
+
+// Turns what TMDB answered into what the home page shows
+export function toHomeState(
+  genre: GenreSlug,
+  result: DiscoverResult,
+): HomeState {
+  switch (result.status) {
+    case "ok":
+      return { kind: "results", genre, shows: result.shows };
+    case "no_results":
+      return { kind: "empty", genre };
+    case "error":
+      return { kind: "error", genre };
+  }
+}
