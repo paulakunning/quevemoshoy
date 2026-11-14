@@ -62,7 +62,7 @@ function Intro() {
   );
 }
 
-function StateMessage({ title, text }: { title: string; text: string }) {
+export function StateMessage({ title, text }: { title: string; text: string }) {
   return (
     <div className="mt-6 rounded-2xl border border-primary/50 bg-card p-4">
       <p className="font-display text-lg font-bold">{title}</p>

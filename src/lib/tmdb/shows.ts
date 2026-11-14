@@ -56,3 +56,11 @@ export function posterUrl(
 ): string {
   return `https://image.tmdb.org/t/p/${size}${path}`;
 }
+
+// The id comes from the URL (/shows/19885), so anyone can type anything there.
+// Valid: only digits, no leading zero, at most 10 digits
+export function parseShowId(raw: string): number | undefined {
+  if (/^[1-9]\d{0,9}$/.test(raw)) {
+    return Number(raw);
+  }
+}
