@@ -15,7 +15,9 @@
   "Show": {
     "details": "Ver detalle",
     "ratingLabel": "Puntaje en TMDB:",
-    "noOverview": "Todavía no hay sinopsis en español."
+    "noOverview": "Todavía no hay sinopsis en español.",
+    "back": "Volver al inicio",
+    "tmdbLink": "Ver en TMDB"
   },
   "States": {
     "empty": {
@@ -30,6 +32,9 @@
   "Error": {
     "title": "Algo salió mal",
     "retry": "Probar de nuevo"
+  },
+  "NotFound": {
+    "title": "No encontramos esta página"
   },
   "LocaleSwitcher": {
     "label": "Idioma"

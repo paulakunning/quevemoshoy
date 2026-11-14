@@ -15,7 +15,9 @@
   "Show": {
     "details": "View details",
     "ratingLabel": "TMDB rating:",
-    "noOverview": "There is no synopsis in English yet."
+    "noOverview": "There is no synopsis in English yet.",
+    "back": "Back to start",
+    "tmdbLink": "View on TMDB"
   },
   "States": {
     "empty": {
@@ -30,6 +32,9 @@
   "Error": {
     "title": "Something went wrong",
     "retry": "Try again"
+  },
+  "NotFound": {
+    "title": "We couldn't find this page"
   },
   "LocaleSwitcher": {
     "label": "Language"

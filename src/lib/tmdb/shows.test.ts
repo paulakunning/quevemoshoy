@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  parseShowId,
   posterUrl,
   toShowDetail,
   toShowSummary,
@@ -67,5 +68,24 @@ describe("posterUrl", () => {
     expect(posterUrl("/x.jpg", "w342")).toEqual(
       "https://image.tmdb.org/t/p/w342/x.jpg",
     );
+  });
+});
+
+describe("parseShowId", () => {
+  it("turns a string of digits into a number", () => {
+    expect(parseShowId("19885")).toBe(19885);
+  });
+
+  it.each([
+    ["abc"],
+    [""],
+    ["-1"],
+    ["0"],
+    ["007"],
+    ["1e3"],
+    ["1.5"],
+    ["99999999999"],
+  ])("rejects %j", (raw) => {
+    expect(parseShowId(raw)).toBeUndefined();
   });
 });
