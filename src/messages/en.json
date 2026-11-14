@@ -5,7 +5,27 @@
   },
   "Home": {
     "title": "What do we watch today?",
-    "tagline": "TV shows for tonight, asked for in plain language."
+    "subtitle": "Pick a genre and the ball reveals five shows.",
+    "loading": "The ball is thinking…",
+    "ready": "{count, plural, one {Done: one show.} other {Done: # shows.}} The first one is {name}."
+  },
+  "Pills": {
+    "title": "Pick a genre"
+  },
+  "Show": {
+    "details": "View details",
+    "ratingLabel": "TMDB rating:",
+    "noOverview": "There is no synopsis in English yet."
+  },
+  "States": {
+    "empty": {
+      "title": "Very doubtful",
+      "text": "We couldn't find shows in that genre. Try another one."
+    },
+    "error": {
+      "title": "Reply hazy",
+      "text": "We couldn't load the shows. Pick a genre again in a while."
+    }
   },
   "LocaleSwitcher": {
     "label": "Language"
