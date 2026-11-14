@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  // Posters come from TMDB's image server
+  images: {
+    remotePatterns: [new URL("https://image.tmdb.org/t/p/**")],
+  },
   turbopack: {
     rules: {
       "*.css": {

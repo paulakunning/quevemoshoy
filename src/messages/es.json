@@ -5,7 +5,27 @@
   },
   "Home": {
     "title": "¿Qué vemos hoy?",
-    "tagline": "Series para esta noche, pedidas en lenguaje natural."
+    "subtitle": "Elegí un género y la bola te revela cinco series.",
+    "loading": "La bola está pensando…",
+    "ready": "{count, plural, one {Listo: una serie.} other {Listo: # series.}} La primera es {name}."
+  },
+  "Pills": {
+    "title": "Elegí un género"
+  },
+  "Show": {
+    "details": "Ver detalle",
+    "ratingLabel": "Puntaje en TMDB:",
+    "noOverview": "Todavía no hay sinopsis en español."
+  },
+  "States": {
+    "empty": {
+      "title": "Muy dudoso",
+      "text": "No encontramos series de ese género. Probá con otro."
+    },
+    "error": {
+      "title": "Respuesta confusa",
+      "text": "No pudimos traer las series. Elegí un género de nuevo en un rato."
+    }
   },
   "LocaleSwitcher": {
     "label": "Idioma"
