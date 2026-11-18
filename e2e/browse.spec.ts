@@ -36,7 +36,10 @@ test("mood pill → results", async ({ page }) => {
 
 test("language switch keeps the genre", async ({ page }) => {
   await page.goto("/es?genre=comedy");
-  await page.getByRole("link", { name: "EN", exact: true }).click();
+  const en = page.getByRole("link", { name: "EN", exact: true });
+  // The prerendered link goes to /en; wait for the one that keeps the query
+  await expect(en).toHaveAttribute("href", "/en?genre=comedy");
+  await en.click();
 
   await expect(page).toHaveURL(/\/en\?genre=comedy$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
