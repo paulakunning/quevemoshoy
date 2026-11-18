@@ -17,7 +17,7 @@ describe("toHomeState", () => {
   it("turns an ok answer into results with its shows", () => {
     expect(toHomeState("mystery", { status: "ok", shows })).toEqual({
       kind: "results",
-      genre: "mystery",
+      pill: "mystery",
       shows,
     });
   });
@@ -25,14 +25,14 @@ describe("toHomeState", () => {
   it("turns an answer with no results into empty", () => {
     expect(toHomeState("comedy", { status: "no_results" })).toEqual({
       kind: "empty",
-      genre: "comedy",
+      pill: "comedy",
     });
   });
 
   it("turns a failed answer into error", () => {
     expect(toHomeState("drama", { status: "error" })).toEqual({
       kind: "error",
-      genre: "drama",
+      pill: "drama",
     });
   });
 });

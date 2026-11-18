@@ -42,7 +42,7 @@ export function HomeView({ state }: { state: HomeState }) {
         />
       )}
 
-      <Pills active={state.kind === "idle" ? undefined : state.genre} />
+      <Pills active={state.kind === "idle" ? undefined : state.pill} />
     </div>
   );
 }

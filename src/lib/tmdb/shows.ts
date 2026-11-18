@@ -13,6 +13,7 @@ export type TmdbShow = {
 // What TMDB sends for GET /tv/{id}
 export type TmdbShowDetail = TmdbShow & {
   genres?: { id: number; name: string }[];
+  number_of_seasons?: number;
 };
 
 // What the app works with

@@ -66,11 +66,11 @@ describe("HomeView", () => {
       expect(title).toHaveTextContent("¿Qué vemos hoy?");
     });
 
-    it("shows six genre links and none is the current one", () => {
+    it("shows six genre and four mood links and none is the current one", () => {
       renderView({ kind: "idle" });
-      const genreLinks = screen.getAllByRole("link");
-      expect(genreLinks).toHaveLength(6);
-      for (const link of genreLinks) {
+      const pillLinks = screen.getAllByRole("link");
+      expect(pillLinks).toHaveLength(10);
+      for (const link of pillLinks) {
         expect(link).not.toHaveAttribute("aria-current");
       }
     });
@@ -84,17 +84,17 @@ describe("HomeView", () => {
 
   describe("results", () => {
     it("shows the first show as a level 2 heading", () => {
-      renderView({ kind: "results", genre: "mystery", shows });
+      renderView({ kind: "results", pill: "mystery", shows });
       const firstShowHeading = screen.getByRole("heading", { level: 2 });
       expect(firstShowHeading).toHaveTextContent("El mentalista");
     });
     it("links 'Ver detalle' to the first show's page", () => {
-      renderView({ kind: "results", genre: "mystery", shows });
+      renderView({ kind: "results", pill: "mystery", shows });
       const detailLink = screen.getByRole("link", { name: "Ver detalle" });
       expect(detailLink).toHaveAttribute("href", "/es/shows/5920");
     });
     it("lists the other four shows", () => {
-      renderView({ kind: "results", genre: "mystery", shows });
+      renderView({ kind: "results", pill: "mystery", shows });
       const otherShowsList = screen.getByRole("list");
       const otherShowsItems = within(otherShowsList).getAllByRole("listitem");
       expect(otherShowsItems).toHaveLength(4);
@@ -104,16 +104,31 @@ describe("HomeView", () => {
       expect(otherShowsItems[3]).toHaveTextContent("You");
     });
     it("announces how many shows there are and which is the first", () => {
-      renderView({ kind: "results", genre: "mystery", shows });
+      renderView({ kind: "results", pill: "mystery", shows });
       const announcement = screen.getByRole("status");
       expect(announcement).toHaveTextContent(
         "Listo: 5 series. La primera es El mentalista.",
       );
     });
     it("marks the active genre as the current page", () => {
-      renderView({ kind: "results", genre: "mystery", shows });
+      renderView({ kind: "results", pill: "mystery", shows });
       const mysteryLink = screen.getByRole("link", { name: "Misterio" });
       expect(mysteryLink).toHaveAttribute("aria-current", "page");
+    });
+
+    it("marks the active mood as the current page", () => {
+      renderView({ kind: "results", pill: "binge", shows });
+      const bingeLink = screen.getByRole("link", { name: "Para engancharme" });
+      expect(bingeLink).toHaveAttribute("aria-current", "page");
+      expect(bingeLink).toHaveAttribute("href", "/es?mood=binge");
+    });
+
+    it("groups the pills under Género and Ánimo", () => {
+      renderView({ kind: "results", pill: "binge", shows });
+      const genres = screen.getByRole("group", { name: "Género" });
+      const moods = screen.getByRole("group", { name: "Ánimo" });
+      expect(within(genres).getAllByRole("link")).toHaveLength(6);
+      expect(within(moods).getAllByRole("link")).toHaveLength(4);
     });
 
     it("says there is no synopsis when a show has none", () => {
@@ -125,7 +140,7 @@ describe("HomeView", () => {
         posterPath: null,
         overview: "",
       };
-      renderView({ kind: "results", genre: "mystery", shows: [show] });
+      renderView({ kind: "results", pill: "mystery", shows: [show] });
 
       expect(
         screen.getByText("Todavía no hay sinopsis en español."),
@@ -140,7 +155,7 @@ describe("HomeView", () => {
         posterPath: null,
         overview: "Una serie de prueba sin calificación.",
       };
-      renderView({ kind: "results", genre: "mystery", shows: [show] });
+      renderView({ kind: "results", pill: "mystery", shows: [show] });
       expect(screen.queryByText("Puntaje en TMDB:")).not.toBeInTheDocument();
     });
 
@@ -153,21 +168,21 @@ describe("HomeView", () => {
         posterPath: null,
         overview: "Una serie de prueba.",
       };
-      renderView({ kind: "results", genre: "mystery", shows: [show] });
+      renderView({ kind: "results", pill: "mystery", shows: [show] });
       expect(screen.queryByRole("list")).not.toBeInTheDocument();
     });
   });
 
   describe("loading", () => {
     it("announces that the ball is thinking", () => {
-      renderView({ kind: "loading", genre: "mystery" });
+      renderView({ kind: "loading", pill: "mystery" });
       expect(screen.getByRole("status")).toHaveTextContent(
         "La bola está pensando…",
       );
     });
 
     it("shows no level 2 heading", () => {
-      renderView({ kind: "loading", genre: "mystery" });
+      renderView({ kind: "loading", pill: "mystery" });
       expect(
         screen.queryByRole("heading", { level: 2 }),
       ).not.toBeInTheDocument();
@@ -176,7 +191,7 @@ describe("HomeView", () => {
 
   describe("empty", () => {
     it("shows the 'Muy dudoso' message and keeps the genre active", () => {
-      renderView({ kind: "empty", genre: "mystery" });
+      renderView({ kind: "empty", pill: "mystery" });
       expect(screen.getByText("Muy dudoso")).toBeInTheDocument();
       expect(screen.getByRole("link", { name: "Misterio" })).toHaveAttribute(
         "aria-current",
@@ -186,10 +201,10 @@ describe("HomeView", () => {
   });
 
   describe("error", () => {
-    it("shows the 'Respuesta confusa' message and keeps the six genre links", () => {
-      renderView({ kind: "error", genre: "mystery" });
+    it("shows the 'Respuesta confusa' message and keeps the pills", () => {
+      renderView({ kind: "error", pill: "mystery" });
       expect(screen.getByText("Respuesta confusa")).toBeInTheDocument();
-      expect(screen.getAllByRole("link")).toHaveLength(6);
+      expect(screen.getAllByRole("link")).toHaveLength(10);
     });
   });
 });
