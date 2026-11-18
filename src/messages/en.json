@@ -10,7 +10,9 @@
     "ready": "{count, plural, one {Done: one show.} other {Done: # shows.}} The first one is {name}."
   },
   "Pills": {
-    "title": "Pick a genre"
+    "title": "Or pick something quick",
+    "genres": "Genre",
+    "moods": "Mood"
   },
   "Show": {
     "details": "View details",
@@ -22,11 +24,11 @@
   "States": {
     "empty": {
       "title": "Very doubtful",
-      "text": "We couldn't find shows in that genre. Try another one."
+      "text": "We couldn't find shows for that option. Try another one."
     },
     "error": {
       "title": "Reply hazy",
-      "text": "We couldn't load the shows. Pick a genre again in a while."
+      "text": "We couldn't load the shows. Try again in a while."
     }
   },
   "Error": {
@@ -49,5 +51,11 @@
     "sci-fi": "Sci-Fi & Fantasy",
     "crime": "Crime",
     "animation": "Animation"
+  },
+  "Moods": {
+    "light": "Something light",
+    "short": "Short episodes",
+    "binge": "To binge",
+    "couple": "For date night"
   }
 }

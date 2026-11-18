@@ -47,26 +47,51 @@ async function fetchTmdb(
   return { found: true, body: await res.json() };
 }
 
+// Filters for TMDB's discover, e.g. { with_genres: "35" }
+export type DiscoverQuery = Record<string, string>;
+
 export async function discoverShows(
-  genreId: number,
+  query: DiscoverQuery,
   locale: Locale,
+  minSeasons?: number,
 ): Promise<DiscoverResult> {
   try {
+    const language = TMDB_LANGUAGE[locale];
     const res = await fetchTmdb("/discover/tv", {
-      with_genres: genreId.toString(),
-      language: TMDB_LANGUAGE[locale],
+      ...query,
+      language,
       sort_by: "popularity.desc",
       include_adult: "false",
       "vote_count.gte": "200",
     });
     if (!res.found) return { status: "error" };
-    const { results } = res.body as { results: TmdbShow[] };
+    let { results } = res.body as { results: TmdbShow[] };
+    if (minSeasons !== undefined) {
+      results = await keepLongShows(results, minSeasons, language);
+    }
     if (results.length === 0) return { status: "no_results" };
     return { status: "ok", shows: results.slice(0, 5).map(toShowSummary) };
   } catch (error) {
     console.error(error);
     return { status: "error" };
   }
+}
+
+// Discover can't filter by number of seasons: that is only in each show's detail.
+// The details are asked for in parallel and stay cached like any other request
+async function keepLongShows(
+  shows: TmdbShow[],
+  minSeasons: number,
+  language: string,
+): Promise<TmdbShow[]> {
+  const details = await Promise.all(
+    shows.map((show) => fetchTmdb(`/tv/${show.id}`, { language })),
+  );
+  // seasons[i] is how many seasons shows[i] has; 0 when TMDB doesn't know
+  const seasons = details.map((detail) =>
+    detail.found ? ((detail.body as TmdbShowDetail).number_of_seasons ?? 0) : 0,
+  );
+  return shows.filter((show, index) => (seasons[index] ?? 0) >= minSeasons);
 }
 
 export async function getShow(id: number, locale: Locale): Promise<ShowResult> {

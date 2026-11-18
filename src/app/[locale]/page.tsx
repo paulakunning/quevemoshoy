@@ -1,13 +1,17 @@
 import { getLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { HomeView } from "@/components/home-view";
-import { toHomeState } from "@/lib/home-state";
-import { discoverShows } from "@/lib/tmdb/client";
-import { genreFromSlug, type Genre } from "@/lib/tmdb/genres";
+import { toHomeState, type PillSlug } from "@/lib/home-state";
+import { discoverShows, type DiscoverQuery } from "@/lib/tmdb/client";
+import { genreFromSlug } from "@/lib/tmdb/genres";
+import { moodFromSlug } from "@/lib/tmdb/moods";
 
 type Props = PageProps<"/[locale]">;
 
-// The URL is the state: /es is the idle home and /es?genre=mystery shows results
+type Pill = { slug: PillSlug; query: DiscoverQuery; minSeasons?: number };
+
+// The URL is the state: /es is the idle home, and /es?genre=mystery
+// or /es?mood=binge show results
 export default function Home({ searchParams }: Props) {
   return (
     // With Cache Components, reading the URL has to happen inside <Suspense>
@@ -18,24 +22,34 @@ export default function Home({ searchParams }: Props) {
 }
 
 async function HomeFromUrl({ searchParams }: Pick<Props, "searchParams">) {
-  const { genre: value } = await searchParams;
-  const genre = genreFromSlug(value);
-  if (!genre) return <HomeView state={{ kind: "idle" }} />;
+  const pill = pillFromUrl(await searchParams);
+  if (!pill) return <HomeView state={{ kind: "idle" }} />;
 
   return (
-    // The key makes React start over when the genre changes,
+    // The key makes React start over when the pill changes,
     // so the loading state shows again instead of the old results
     <Suspense
-      key={genre.slug}
-      fallback={<HomeView state={{ kind: "loading", genre: genre.slug }} />}
+      key={pill.slug}
+      fallback={<HomeView state={{ kind: "loading", pill: pill.slug }} />}
     >
-      <GenreResults genre={genre} />
+      <PillResults pill={pill} />
     </Suspense>
   );
 }
 
-async function GenreResults({ genre }: { genre: Genre }) {
+// With both ?genre= and ?mood= in the URL, the genre wins
+function pillFromUrl(
+  params: Record<string, string | string[] | undefined>,
+): Pill | undefined {
+  const genre = genreFromSlug(params.genre);
+  if (genre) {
+    return { slug: genre.slug, query: { with_genres: `${genre.tmdbId}` } };
+  }
+  return moodFromSlug(params.mood);
+}
+
+async function PillResults({ pill }: { pill: Pill }) {
   const locale = await getLocale();
-  const result = await discoverShows(genre.tmdbId, locale);
-  return <HomeView state={toHomeState(genre.slug, result)} />;
+  const result = await discoverShows(pill.query, locale, pill.minSeasons);
+  return <HomeView state={toHomeState(pill.slug, result)} />;
 }

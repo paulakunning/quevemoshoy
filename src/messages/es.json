@@ -10,7 +10,9 @@
     "ready": "{count, plural, one {Listo: una serie.} other {Listo: # series.}} La primera es {name}."
   },
   "Pills": {
-    "title": "Elegí un género"
+    "title": "O elegí algo rápido",
+    "genres": "Género",
+    "moods": "Ánimo"
   },
   "Show": {
     "details": "Ver detalle",
@@ -22,11 +24,11 @@
   "States": {
     "empty": {
       "title": "Muy dudoso",
-      "text": "No encontramos series de ese género. Probá con otro."
+      "text": "No encontramos series para esa opción. Probá con otra."
     },
     "error": {
       "title": "Respuesta confusa",
-      "text": "No pudimos traer las series. Elegí un género de nuevo en un rato."
+      "text": "No pudimos traer las series. Probá de nuevo en un rato."
     }
   },
   "Error": {
@@ -49,5 +51,11 @@
     "sci-fi": "Ciencia ficción y fantasía",
     "crime": "Crimen",
     "animation": "Animación"
+  },
+  "Moods": {
+    "light": "Algo liviano",
+    "short": "Cortito",
+    "binge": "Para engancharme",
+    "couple": "Para ver en pareja"
   }
 }
