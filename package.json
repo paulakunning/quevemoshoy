@@ -56,5 +56,9 @@
       "prettier --write"
     ],
     "*.{json,md,css,yml}": "prettier --write"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "@swc/core@1.16.22": true
   }
 }
