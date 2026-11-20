@@ -57,5 +57,21 @@
     "short": "Cortito",
     "binge": "Para engancharme",
     "couple": "Para ver en pareja"
+  },
+  "FilterGenres": {
+    "action": "Acción",
+    "animation": "Animación",
+    "comedy": "Comedia",
+    "crime": "Crimen",
+    "documentary": "Documental",
+    "drama": "Drama",
+    "family": "Familiar",
+    "horror": "Terror",
+    "mystery": "Misterio",
+    "reality": "Reality",
+    "romance": "Romance",
+    "sci-fi": "Ciencia ficción y fantasía",
+    "war": "Bélico",
+    "western": "Western"
   }
 }
