@@ -57,5 +57,21 @@
     "short": "Short episodes",
     "binge": "To binge",
     "couple": "For date night"
+  },
+  "FilterGenres": {
+    "action": "Action",
+    "animation": "Animation",
+    "comedy": "Comedy",
+    "crime": "Crime",
+    "documentary": "Documentary",
+    "drama": "Drama",
+    "family": "Family",
+    "horror": "Horror",
+    "mystery": "Mystery",
+    "reality": "Reality",
+    "romance": "Romance",
+    "sci-fi": "Sci-Fi & Fantasy",
+    "war": "War",
+    "western": "Western"
   }
 }
