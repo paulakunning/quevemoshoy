@@ -15,7 +15,9 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^4.0.86",
     "@base-ui/react": "^1.9.0",
+    "ai": "^7.0.179",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "lucide-react": "^1.70.0",
