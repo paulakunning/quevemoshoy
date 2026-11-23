@@ -61,3 +61,43 @@ Short records of the technical decisions behind this app: what was chosen, why, 
 **Why.** Caching, prerendering and streaming behave differently in development, so only the production build tests what users get. Running it on the runner keeps the check independent of the preview deployment and makes it usable as a required check. Not mocking TMDB lets the tests cover the one thing unit tests cannot: the whole path from the browser to the API.
 
 **Trade-off.** The job needs the `TMDB_TOKEN` secret and can fail when TMDB does. One retry in CI absorbs the occasional slow response, and the tests assert on structure (five results, a title, a link) rather than on specific shows.
+
+## 8. The text search goes through a Server Action, not the URL
+
+**Decision.** The search form sends the text with a Server Action, `searchAction(text, locale)`. The result lives in client state (`SearchProvider`) and covers the page until a link is clicked. The pills stay URLs.
+
+**Why.** Every text search costs an AI call. In the URL, each reload, shared link or crawler visit would repeat it. The locale is passed as an argument because root params are not available inside Server Actions. A Server Action is a public endpoint, so both arguments are validated as untrusted input.
+
+**Trade-off.** A text result cannot be shared or bookmarked, and the back button does not return to it. Before JavaScript loads, the form does not send.
+
+## 9. The AI can only answer with a schema
+
+**Decision.** The model's output is constrained by `filtersSchema` (Zod): up to 3 genres from a fixed list in `include` and in `exclude`, and `maxRuntime` from 5 to 180 minutes or `null`. Groq checks the answer against it and the AI SDK validates it again. `toDiscoverQuery` turns valid filters into TMDB parameters; a genre both included and excluded is only excluded.
+
+**Why.** The person's text goes straight to the model, so the model's answer is treated as untrusted. With a closed list, a prompt injection can at most pick genres, and an answer outside the schema becomes an error instead of a TMDB request. The same schema gives the TypeScript type.
+
+**Trade-off.** Anything the schema cannot express is dropped, such as "this genre or that one", a year or a country. When the model breaks the schema, the person sees an error message instead of a partial result.
+
+## 10. Horror and romance are TMDB keywords, not genres
+
+**Decision.** TMDB's TV genres have no horror or romance, so both go as keywords (`315058` and `9840`) in `with_keywords` and `without_keywords`. The "For date night" mood uses the romance keyword plus genres.
+
+**Why.** Checked against the API: the TV genre list does not include them, and these keywords are the closest tag.
+
+**Trade-off.** Keywords are added by the community and are less consistent than genres. The romance keyword also tags crime and fantasy shows, which is why the date night mood leaves those genres out.
+
+## 11. Number of seasons is checked in each show's detail
+
+**Decision.** Discover cannot filter by number of seasons. For "To binge" (4 seasons or more), the details of the 20 discover results are requested in parallel and the first 5 that qualify are kept. Each detail is cached like any other TMDB request.
+
+**Why.** `number_of_seasons` only exists in the detail endpoint.
+
+**Trade-off.** 21 requests instead of 1 when the cache is cold, and fewer than 5 results if the first page has too few long shows.
+
+## 12. AI evals run by hand, not in CI
+
+**Decision.** `npm run eval` sends 30 requests, in Spanish and English, to the real model and passes with 24 or more. It is not part of `npm test` or CI.
+
+**Why.** The model is not deterministic, so it is measured as a score over many cases instead of with pass/fail tests. A run spends about 16,000 tokens of the free quota and depends on Groq being up. In CI it would spend that on every push, and a Groq outage would block merges. It runs when the prompt, the model or the schema change.
+
+**Trade-off.** A change in the model's behavior is only caught when someone runs the evals.
