@@ -1,6 +1,7 @@
 import { getLocale } from "next-intl/server";
 import { Suspense } from "react";
 import { HomeView } from "@/components/home-view";
+import { SearchProvider } from "@/components/search-provider";
 import { toHomeState, type PillSlug } from "@/lib/home-state";
 import { discoverShows, type DiscoverQuery } from "@/lib/tmdb/client";
 import { genreFromSlug } from "@/lib/tmdb/genres";
@@ -10,14 +11,16 @@ type Props = PageProps<"/[locale]">;
 
 type Pill = { slug: PillSlug; query: DiscoverQuery; minSeasons?: number };
 
-// The URL is the state: /es is the idle home, and /es?genre=mystery
-// or /es?mood=binge show results
+// The URL is the state for the pills: /es is the idle home, and /es?genre=mystery
+// or /es?mood=binge show results. A text search result covers it from <SearchProvider>
 export default function Home({ searchParams }: Props) {
   return (
-    // With Cache Components, reading the URL has to happen inside <Suspense>
-    <Suspense fallback={<HomeView state={{ kind: "idle" }} />}>
-      <HomeFromUrl searchParams={searchParams} />
-    </Suspense>
+    <SearchProvider>
+      {/* With Cache Components, reading the URL has to happen inside <Suspense> */}
+      <Suspense fallback={<HomeView state={{ kind: "idle" }} />}>
+        <HomeFromUrl searchParams={searchParams} />
+      </Suspense>
+    </SearchProvider>
   );
 }
 

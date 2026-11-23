@@ -94,7 +94,7 @@ body:has([data-home-state]:not([data-home-state="results"])) .brand {
   visibility: hidden;
 }
 
-/* The magic ball. `data-ball` (idle | loading | revealed) is set by <Ball> */
+/* The magic ball. `data-ball` (idle | loading | thinking | message | revealed) is set by <Ball> */
 .ball-wrap {
   width: min(70vw, 280px);
   aspect-ratio: 1;
@@ -158,6 +158,8 @@ body:has([data-home-state]:not([data-home-state="results"])) .brand {
   inset: 26%;
   border-radius: 50%;
   overflow: hidden;
+  display: grid;
+  place-items: center;
   background: radial-gradient(
     circle at 50% 45%,
     var(--liquid-2),
@@ -181,14 +183,41 @@ body:has([data-home-state]:not([data-home-state="results"])) .brand {
 /* The reveal: the 8 slides out, the window slides in and the poster rises.
    Each rule holds the final look and the keyframes only say where it starts,
    so the animation plays once when the element appears */
-[data-ball="revealed"] .face-8 {
+[data-ball="revealed"] .face-8,
+[data-ball="thinking"] .face-8,
+[data-ball="message"] .face-8 {
   transform: translateX(150%) scaleX(0.2);
   opacity: 0;
   animation: eight-out 0.55s cubic-bezier(0.6, 0, 0.4, 1);
 }
 [data-ball="revealed"] .window {
   transform: scale(1.45);
+}
+.window {
   animation: window-in 0.55s cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+/* Thinking and message: a triangle floats in the window, as in a real magic 8 ball.
+   It tumbles only while thinking; a message stays still so it can be read */
+.die {
+  width: 80%;
+}
+[data-ball="thinking"] .die {
+  animation: tumble 2.4s ease-in-out infinite;
+}
+.swirl {
+  position: absolute;
+  inset: -30%;
+  opacity: 0.5;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgb(255 255 255 / 0.2),
+    transparent 40%,
+    rgb(255 255 255 / 0.12),
+    transparent 70%
+  );
+  animation: swirl 1.1s linear infinite;
 }
 .win-poster {
   object-fit: cover;
@@ -241,6 +270,22 @@ body:has([data-home-state]:not([data-home-state="results"])) .brand {
     transform: translateY(28px) rotate(-4deg) scale(0.96);
   }
 }
+@keyframes tumble {
+  0%,
+  100% {
+    transform: translateY(18%) rotate(-14deg) scale(0.82);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-4%) rotate(10deg) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes swirl {
+  to {
+    transform: rotate(360deg);
+  }
+}
 @keyframes fade {
   from {
     opacity: 0;
@@ -251,14 +296,16 @@ body:has([data-home-state]:not([data-home-state="results"])) .brand {
 @media (prefers-reduced-motion: reduce) {
   .float,
   .flash,
+  .swirl,
+  .die,
   [data-ball="loading"],
-  [data-ball="revealed"] .face-8 {
+  .face-8 {
     animation: none;
   }
   .ball-wrap {
     transition: none;
   }
-  [data-ball="revealed"] .window,
+  .window,
   .deal {
     animation: fade 0.2s both;
   }
