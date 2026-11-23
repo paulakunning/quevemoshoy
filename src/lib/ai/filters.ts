@@ -8,7 +8,9 @@ const SYSTEM_PROMPT = `You turn a request for TV shows into search filters.
 The genres you can use are: ${FILTER_GENRES.join(", ")}.
 Rules:
 - Use only what the request says. Do not guess or add genres it does not ask for.
+- A word that clearly means a genre asks for it: "gracioso" or "hilarious" is comedy, "de miedo" or "scary" is horror.
 - "corto", "cortito" or "short" means maxRuntime 30.
+- A limit in minutes or hours sets maxRuntime in minutes: "menos de 50 minutos" is 50, "at most an hour" is 60.
 - "nada de X", "sin X" or "no X" means X goes in exclude.
 - The request can be in any language.
 - If you do not understand the request, leave include and exclude empty and maxRuntime null.`;
