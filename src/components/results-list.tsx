@@ -1,12 +1,22 @@
 import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
 import { Link } from "@/i18n/navigation";
+import type { Filters } from "@/lib/ai/schemas";
 import type { ShowSummary } from "@/lib/tmdb/shows";
+import { Chips } from "./chips";
+import { AskAgainButton } from "./search-form";
 import { ShowCard, ShowMeta } from "./show-card";
 
 // The first show goes big under the ball (its poster is inside it);
-// the rest go in a numbered list that starts at 2
-export function ResultsList({ shows }: { shows: ShowSummary[] }) {
+// the rest go in a numbered list that starts at 2.
+// `filters` only comes with a text search: then the chips and "Ask something else" show too
+export function ResultsList({
+  shows,
+  filters,
+}: {
+  shows: ShowSummary[];
+  filters?: Filters;
+}) {
   const t = useTranslations("Show");
   const [top, ...rest] = shows;
   if (!top) return null;
@@ -30,6 +40,7 @@ export function ResultsList({ shows }: { shows: ShowSummary[] }) {
           {t("details")}
         </Link>
       </div>
+      {filters && <Chips filters={filters} />}
       {rest.length > 0 && (
         <ol start={2} className="mt-6 space-y-3">
           {rest.map((show, index) => (
@@ -44,6 +55,7 @@ export function ResultsList({ shows }: { shows: ShowSummary[] }) {
           ))}
         </ol>
       )}
+      {filters && <AskAgainButton />}
     </section>
   );
 }

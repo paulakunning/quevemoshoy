@@ -1,16 +1,23 @@
 import { render, screen, within } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import type { Filters } from "@/lib/ai/schemas";
 import type { HomeState } from "@/lib/home-state";
 import type { ShowSummary } from "@/lib/tmdb/shows";
 import es from "@/messages/es.json";
 import { HomeView } from "./home-view";
+import { SearchProvider } from "./search-provider";
 
-// The components read their texts from next-intl, so the test gives them the Spanish ones
+vi.mock("@/app/[locale]/actions", () => ({ searchAction: vi.fn() }));
+
+// The components read their texts from next-intl, so the test gives them the Spanish ones.
+// The search form inside the view needs its provider
 function renderView(state: HomeState) {
   return render(
     <NextIntlClientProvider locale="es" messages={es}>
-      <HomeView state={state} />
+      <SearchProvider>
+        <HomeView state={state} />
+      </SearchProvider>
     </NextIntlClientProvider>,
   );
 }
@@ -205,6 +212,72 @@ describe("HomeView", () => {
       renderView({ kind: "error", pill: "mystery" });
       expect(screen.getByText("Respuesta confusa")).toBeInTheDocument();
       expect(screen.getAllByRole("link")).toHaveLength(10);
+    });
+  });
+
+  describe("text search", () => {
+    const filters: Filters = {
+      include: ["mystery"],
+      exclude: ["horror"],
+      maxRuntime: 30,
+    };
+
+    it("shows what the ball understood", () => {
+      renderView({ kind: "results", shows, filters });
+      const chips = screen.getByRole("region", {
+        name: "Lo que entendió la bola",
+      });
+      expect(within(chips).getByText("Misterio")).toBeInTheDocument();
+      expect(within(chips).getByText("Sin terror")).toBeInTheDocument();
+      expect(
+        within(chips).getByText("Episodios de hasta 30 min"),
+      ).toBeInTheDocument();
+    });
+
+    it("offers to ask again and marks no pill as current", () => {
+      renderView({ kind: "results", shows, filters });
+      expect(
+        screen.getByRole("button", { name: "Preguntar otra cosa" }),
+      ).toBeInTheDocument();
+      for (const link of screen.getAllByRole("link")) {
+        expect(link).not.toHaveAttribute("aria-current");
+      }
+    });
+
+    it("shows no chips when the ball understood nothing", () => {
+      renderView({
+        kind: "results",
+        shows,
+        filters: { include: [], exclude: [], maxRuntime: null },
+      });
+      expect(
+        screen.queryByText("Lo que entendió la bola"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("shows no chips for a pill", () => {
+      renderView({ kind: "results", pill: "mystery", shows });
+      expect(
+        screen.queryByText("Lo que entendió la bola"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("shows the text search message when nothing was found", () => {
+      renderView({ kind: "empty" });
+      expect(
+        screen.getByText(
+          "No encontramos series para ese pedido. Probá sacando una condición.",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("shows neither results nor a message while thinking", () => {
+      renderView({ kind: "thinking" });
+      expect(
+        screen.queryByRole("heading", { level: 2 }),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Muy dudoso")).not.toBeInTheDocument();
+      expect(screen.queryByText("Respuesta confusa")).not.toBeInTheDocument();
     });
   });
 });

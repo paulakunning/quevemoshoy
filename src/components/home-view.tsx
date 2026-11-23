@@ -4,6 +4,13 @@ import { posterUrl } from "@/lib/tmdb/shows";
 import { Ball } from "./ball";
 import { Pills } from "./pills";
 import { ResultsList } from "./results-list";
+import { SearchForm } from "./search-form";
+
+// For a pill the message talks about the option; without one, about the text written
+const MESSAGE_KEYS = {
+  empty: { pill: "empty", text: "textEmpty" },
+  error: { pill: "error", text: "textError" },
+} as const;
 
 // The whole home page for one state: data comes in, interface comes out.
 // It doesn't fetch anything, which is what makes it easy to test
@@ -11,38 +18,63 @@ export function HomeView({ state }: { state: HomeState }) {
   const t = useTranslations();
   const shows = state.kind === "results" ? state.shows : [];
   const top = shows[0];
+  const pill = "pill" in state ? state.pill : undefined;
+  const failed = state.kind === "empty" || state.kind === "error";
+  const message = failed
+    ? MESSAGE_KEYS[state.kind][pill ? "pill" : "text"]
+    : undefined;
 
   return (
     // globals.css reads data-home-state (header brand, size of the ball)
     <div data-home-state={state.kind}>
       <section className="pt-2 text-center">
-        <Ball
-          state={
-            top ? "revealed" : state.kind === "loading" ? "loading" : "idle"
-          }
-          posterUrl={
-            top?.posterPath ? posterUrl(top.posterPath, "w342") : undefined
-          }
-        />
+        {top ? (
+          <Ball
+            state="revealed"
+            posterUrl={
+              top.posterPath ? posterUrl(top.posterPath, "w342") : undefined
+            }
+          />
+        ) : failed && !pill ? (
+          <Ball
+            state="message"
+            lines={[
+              t(`Ball.${state.kind}.top`),
+              t(`Ball.${state.kind}.bottom`),
+            ]}
+          />
+        ) : (
+          <Ball
+            state={
+              state.kind === "loading" || state.kind === "thinking"
+                ? state.kind
+                : "idle"
+            }
+          />
+        )}
         {state.kind !== "results" && <Intro />}
       </section>
 
       {/* Screen readers announce changes inside role="status" */}
       <p role="status" className="sr-only">
-        {state.kind === "loading" && t("Home.loading")}
+        {(state.kind === "loading" || state.kind === "thinking") &&
+          t("Home.loading")}
         {top && t("Home.ready", { count: shows.length, name: top.name })}
       </p>
 
-      {state.kind === "results" && <ResultsList shows={shows} />}
+      {state.kind === "results" && (
+        <ResultsList shows={shows} filters={state.filters} />
+      )}
       {state.kind === "loading" && <ResultsSkeleton />}
-      {(state.kind === "empty" || state.kind === "error") && (
+      {message && (
         <StateMessage
-          title={t(`States.${state.kind}.title`)}
-          text={t(`States.${state.kind}.text`)}
+          title={t(`States.${message}.title`)}
+          text={t(`States.${message}.text`)}
         />
       )}
 
-      <Pills active={state.kind === "idle" ? undefined : state.pill} />
+      {state.kind !== "results" && <SearchForm />}
+      <Pills active={pill} />
     </div>
   );
 }

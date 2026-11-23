@@ -5,7 +5,7 @@
   },
   "Home": {
     "title": "What do we watch today?",
-    "subtitle": "Pick a genre and the ball reveals five shows.",
+    "subtitle": "Ask the ball a question and it reveals five shows.",
     "loading": "The ball is thinking…",
     "ready": "{count, plural, one {Done: one show.} other {Done: # shows.}} The first one is {name}."
   },
@@ -29,6 +29,14 @@
     "error": {
       "title": "Reply hazy",
       "text": "We couldn't load the shows. Try again in a while."
+    },
+    "textEmpty": {
+      "title": "Very doubtful",
+      "text": "We found no shows for that request. Try dropping a condition."
+    },
+    "textError": {
+      "title": "Reply hazy",
+      "text": "We couldn't understand the request. Ask again or pick something quick."
     }
   },
   "Error": {
@@ -73,5 +81,27 @@
     "sci-fi": "Sci-Fi & Fantasy",
     "war": "War",
     "western": "Western"
+  },
+  "Search": {
+    "label": "Your question",
+    "placeholder": "Something short and mysterious, no horror",
+    "submit": "Reveal shows",
+    "invalid": "Write a request of up to 200 characters.",
+    "again": "Ask something else"
+  },
+  "Chips": {
+    "title": "What the ball understood",
+    "without": "No {genre}",
+    "maxRuntime": "Episodes up to {minutes} min"
+  },
+  "Ball": {
+    "empty": {
+      "top": "VERY",
+      "bottom": "DOUBTFUL"
+    },
+    "error": {
+      "top": "REPLY",
+      "bottom": "HAZY"
+    }
   }
 }

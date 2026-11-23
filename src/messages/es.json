@@ -5,7 +5,7 @@
   },
   "Home": {
     "title": "¿Qué vemos hoy?",
-    "subtitle": "Elegí un género y la bola te revela cinco series.",
+    "subtitle": "Hacele una pregunta a la bola y te revela cinco series.",
     "loading": "La bola está pensando…",
     "ready": "{count, plural, one {Listo: una serie.} other {Listo: # series.}} La primera es {name}."
   },
@@ -29,6 +29,14 @@
     "error": {
       "title": "Respuesta confusa",
       "text": "No pudimos traer las series. Probá de nuevo en un rato."
+    },
+    "textEmpty": {
+      "title": "Muy dudoso",
+      "text": "No encontramos series para ese pedido. Probá sacando una condición."
+    },
+    "textError": {
+      "title": "Respuesta confusa",
+      "text": "No pudimos entender el pedido. Preguntá de nuevo o elegí algo rápido."
     }
   },
   "Error": {
@@ -73,5 +81,27 @@
     "sci-fi": "Ciencia ficción y fantasía",
     "war": "Bélico",
     "western": "Western"
+  },
+  "Search": {
+    "label": "Tu pregunta",
+    "placeholder": "Algo cortito de misterio, nada de terror",
+    "submit": "Revelar series",
+    "invalid": "Escribí un pedido de hasta 200 caracteres.",
+    "again": "Preguntar otra cosa"
+  },
+  "Chips": {
+    "title": "Lo que entendió la bola",
+    "without": "Sin {genre}",
+    "maxRuntime": "Episodios de hasta {minutes} min"
+  },
+  "Ball": {
+    "empty": {
+      "top": "MUY",
+      "bottom": "DUDOSO"
+    },
+    "error": {
+      "top": "RESPUESTA",
+      "bottom": "CONFUSA"
+    }
   }
 }
