@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "test": "vitest run",
+    "eval": "vitest run --config vitest.eval.config.mts",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
   },
