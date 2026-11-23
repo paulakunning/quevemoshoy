@@ -1,6 +1,7 @@
 import "server-only";
 import { cacheLife } from "next/cache";
 import type { Locale } from "next-intl";
+import { env } from "@/lib/env";
 import {
   toShowDetail,
   toShowSummary,
@@ -22,13 +23,6 @@ export type ShowResult =
 
 const TMDB_LANGUAGE: Record<Locale, string> = { es: "es-AR", en: "en-US" };
 
-// Read on each request, not on import, so `next build` works without the token
-function token(): string {
-  const value = process.env.TMDB_TOKEN;
-  if (!value) throw new Error("TMDB_TOKEN is not set");
-  return value;
-}
-
 // Throws on failure so an error never gets stored in the cache
 async function fetchTmdb(
   path: string,
@@ -39,7 +33,7 @@ async function fetchTmdb(
 
   const url = `https://api.themoviedb.org/3${path}?${new URLSearchParams(query)}`;
   const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${token()}` },
+    headers: { Authorization: `Bearer ${env("TMDB_TOKEN")}` },
   });
 
   if (res.status === 404) return { found: false };
