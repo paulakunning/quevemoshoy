@@ -271,6 +271,27 @@ describe("HomeView", () => {
       ).toBeInTheDocument();
     });
 
+    it("tells this person to ask tomorrow when their searches ran out", () => {
+      renderView({ kind: "quota", global: false });
+      expect(screen.getByText("PREGUNTÁ")).toBeInTheDocument();
+      expect(screen.getByText("MAÑANA")).toBeInTheDocument();
+      expect(screen.getByText("Preguntá mañana")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Se terminaron tus búsquedas de hoy/),
+      ).toBeInTheDocument();
+      expect(screen.getAllByRole("link")).toHaveLength(10);
+    });
+
+    it("says the searches ran out for everyone at the global ceiling", () => {
+      renderView({ kind: "quota", global: true });
+      expect(
+        screen.getByText(/Hoy se terminaron las búsquedas para todos/),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(/Se terminaron tus búsquedas de hoy/),
+      ).not.toBeInTheDocument();
+    });
+
     it("shows neither results nor a message while thinking", () => {
       renderView({ kind: "thinking" });
       expect(

@@ -12,15 +12,19 @@
     "prepare": "husky",
     "test": "vitest run",
     "eval": "vitest run --config vitest.eval.config.mts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "test:watch": "vitest",
     "test:e2e": "playwright test"
   },
   "dependencies": {
     "@ai-sdk/groq": "^4.0.86",
     "@base-ui/react": "^1.9.0",
+    "@neondatabase/serverless": "^1.2.1",
     "ai": "^7.0.179",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
+    "drizzle-orm": "^0.45.4",
     "lucide-react": "^1.70.0",
     "next": "16.4.5",
     "next-intl": "^4.14.9",
@@ -40,6 +44,7 @@
     "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
     "eslint-config-prettier": "^10.1.8",
@@ -64,6 +69,7 @@
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
     "@swc/core@1.16.22": true,
-    "fsevents": false
+    "fsevents": false,
+    "esbuild": false
   }
 }
