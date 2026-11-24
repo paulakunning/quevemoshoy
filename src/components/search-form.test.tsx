@@ -119,6 +119,7 @@ describe("SearchProvider", () => {
         },
       ],
       filters: { include: ["mystery"], exclude: [], maxRuntime: null },
+      quota: { left: 4, global: false },
     });
     renderHome();
     type("misterio");

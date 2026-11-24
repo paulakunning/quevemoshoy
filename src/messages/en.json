@@ -37,6 +37,14 @@
     "textError": {
       "title": "Reply hazy",
       "text": "We couldn't understand the request. Ask again or pick something quick."
+    },
+    "quota": {
+      "title": "Ask tomorrow",
+      "text": "You've used today's searches. You get 5 more tomorrow. The quick picks still work."
+    },
+    "quotaGlobal": {
+      "title": "Ask tomorrow",
+      "text": "Today's searches ran out for everyone. More tomorrow. The quick picks still work."
     }
   },
   "Error": {
@@ -102,6 +110,10 @@
     "error": {
       "top": "REPLY",
       "bottom": "HAZY"
+    },
+    "quota": {
+      "top": "ASK",
+      "bottom": "TOMORROW"
     }
   }
 }

@@ -22,7 +22,9 @@ export type HomeState =
       filters?: Filters;
     }
   | { kind: "empty"; pill?: PillSlug }
-  | { kind: "error"; pill?: PillSlug };
+  | { kind: "error"; pill?: PillSlug }
+  // No AI searches left today: for this person, or for everyone (`global`)
+  | { kind: "quota"; global: boolean };
 
 // Turns what TMDB answered into what the home page shows
 export function toHomeState(pill: PillSlug, result: DiscoverResult): HomeState {
@@ -46,6 +48,8 @@ export function searchToHomeState(result: SearchResult): HomeState {
     case "ai_error":
     case "error":
       return { kind: "error" };
+    case "quota":
+      return { kind: "quota", global: result.quota.global };
     case "invalid_input":
       return { kind: "idle" };
   }

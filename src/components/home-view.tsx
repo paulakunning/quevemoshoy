@@ -22,7 +22,14 @@ export function HomeView({ state }: { state: HomeState }) {
   const failed = state.kind === "empty" || state.kind === "error";
   const message = failed
     ? MESSAGE_KEYS[state.kind][pill ? "pill" : "text"]
-    : undefined;
+    : state.kind === "quota"
+      ? state.global
+        ? "quotaGlobal"
+        : "quota"
+      : undefined;
+  // Two words in the ball's triangle answer a text search; a pill only gets the message
+  const ballWords =
+    state.kind === "quota" ? "quota" : failed && !pill ? state.kind : undefined;
 
   return (
     // globals.css reads data-home-state (header brand, size of the ball)
@@ -35,13 +42,10 @@ export function HomeView({ state }: { state: HomeState }) {
               top.posterPath ? posterUrl(top.posterPath, "w342") : undefined
             }
           />
-        ) : failed && !pill ? (
+        ) : ballWords ? (
           <Ball
             state="message"
-            lines={[
-              t(`Ball.${state.kind}.top`),
-              t(`Ball.${state.kind}.bottom`),
-            ]}
+            lines={[t(`Ball.${ballWords}.top`), t(`Ball.${ballWords}.bottom`)]}
           />
         ) : (
           <Ball

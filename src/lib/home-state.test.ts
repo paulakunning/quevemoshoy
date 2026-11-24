@@ -45,8 +45,10 @@ describe("searchToHomeState", () => {
     maxRuntime: null,
   };
 
+  const quota = { left: 3, global: false };
+
   it("turns ok into results with its shows and filters, without a pill", () => {
-    expect(searchToHomeState({ status: "ok", shows, filters })).toEqual({
+    expect(searchToHomeState({ status: "ok", shows, filters, quota })).toEqual({
       kind: "results",
       shows,
       filters,
@@ -54,15 +56,29 @@ describe("searchToHomeState", () => {
   });
 
   it("turns no_results into empty", () => {
-    expect(searchToHomeState({ status: "no_results", filters })).toEqual({
-      kind: "empty",
+    expect(searchToHomeState({ status: "no_results", filters, quota })).toEqual(
+      {
+        kind: "empty",
+      },
+    );
+  });
+
+  it("turns ai_error into error", () => {
+    expect(searchToHomeState({ status: "ai_error", quota })).toEqual({
+      kind: "error",
     });
   });
 
-  it.each([["ai_error" as const], ["error" as const]])(
-    "turns %s into error",
-    (status) => {
-      expect(searchToHomeState({ status })).toEqual({ kind: "error" });
+  it("turns error into error", () => {
+    expect(searchToHomeState({ status: "error" })).toEqual({ kind: "error" });
+  });
+
+  it.each([[false], [true]])(
+    "turns quota (global: %s) into quota",
+    (global) => {
+      expect(
+        searchToHomeState({ status: "quota", quota: { left: 0, global } }),
+      ).toEqual({ kind: "quota", global });
     },
   );
 

@@ -37,6 +37,14 @@
     "textError": {
       "title": "Respuesta confusa",
       "text": "No pudimos entender el pedido. Preguntá de nuevo o elegí algo rápido."
+    },
+    "quota": {
+      "title": "Preguntá mañana",
+      "text": "Se terminaron tus búsquedas de hoy. Mañana tenés 5 más. Las opciones rápidas siguen andando."
+    },
+    "quotaGlobal": {
+      "title": "Preguntá mañana",
+      "text": "Hoy se terminaron las búsquedas para todos. Mañana hay más. Las opciones rápidas siguen andando."
     }
   },
   "Error": {
@@ -102,6 +110,10 @@
     "error": {
       "top": "RESPUESTA",
       "bottom": "CONFUSA"
+    },
+    "quota": {
+      "top": "PREGUNTÁ",
+      "bottom": "MAÑANA"
     }
   }
 }
